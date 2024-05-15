@@ -6,14 +6,17 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          'سفارش های انجام شده',
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
-        Expanded(child: OrderInfo()),
-      ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0,20,0,0),
+      child: Column(
+        children: [
+          Text(
+            'سفارش های انجام شده',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          Expanded(child: OrderInfo()),
+        ],
+      ),
     );
   }
 }

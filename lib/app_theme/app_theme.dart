@@ -38,6 +38,7 @@ class AppTheme {
       //     color: Colors.black,
       //   ),
       // ),
+
       textTheme: TextTheme(
         titleSmall: TextStyle(
           fontWeight: FontWeight.bold,
@@ -50,6 +51,10 @@ class AppTheme {
         bodyMedium: TextStyle(
           fontSize: 14,
         ),
+        bodySmall: TextStyle(
+          fontSize: 12,
+          color: Colors.grey,
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
@@ -57,7 +62,11 @@ class AppTheme {
           backgroundColor: MaterialStateProperty.all(Colors.green),
         ),
       ),
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      colorScheme: ColorScheme.light(
+        primary: Color(0xffcdeef0),
+        onPrimary: Color(0xff04a8b2),
+        secondary: Color.fromARGB(255, 224, 216, 216),
+      ),
       useMaterial3: true,
     );
   }

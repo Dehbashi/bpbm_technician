@@ -1,3 +1,4 @@
+import 'package:bpbm_technician/blocs/note_bloc/note_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,6 +7,7 @@ import 'package:bpbm_technician/data/models/orders/detail_order.dart';
 import 'package:bpbm_technician/data/models/orders/order_model.dart';
 import 'package:bpbm_technician/screens/home_screen/widgets/order_detail_button.dart';
 import 'package:bpbm_technician/screens/notes_screen/notes_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persian/persian.dart';
 
 class OrdersContainer extends StatelessWidget {
@@ -75,7 +77,13 @@ class OrdersContainer extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => NotesScreen(),
+                          builder: (context) => BlocProvider(
+                            create: (context) => NoteBloc(),
+                            child: NotesScreen(
+                              orderId: order.id,
+                              orderTitle: order.service,
+                            ),
+                          ),
                         ),
                       );
                     },
