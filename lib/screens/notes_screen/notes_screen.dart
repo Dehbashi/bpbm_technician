@@ -1,12 +1,9 @@
 import 'package:bpbm_technician/blocs/note_bloc/note_bloc.dart';
-import 'package:bpbm_technician/data/fake_data.dart';
-import 'package:bpbm_technician/screens/notes_screen/methods/show_image_picker_modal.dart';
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_header.dart';
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_messages.dart';
+import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:persian/persian.dart';
 
 class NotesScreen extends StatefulWidget {
   final int orderId;
@@ -24,6 +21,7 @@ class NotesScreen extends StatefulWidget {
 class _NotesScreenState extends State<NotesScreen> {
   late NoteBloc bloc;
   late TextEditingController messageController;
+  FocusNode _focusNode = FocusNode();
   Color sendButtonColor = Colors.grey;
 
   @override
@@ -37,6 +35,7 @@ class _NotesScreenState extends State<NotesScreen> {
   @override
   void dispose() {
     messageController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -64,8 +63,13 @@ class _NotesScreenState extends State<NotesScreen> {
                   orderId: widget.orderId,
                   orderTitle: widget.orderTitle,
                 ),
-                NotesScreenMessages(),
-                TextField(
+                NotesScreenMessages(
+                  messageController: messageController,
+                  focusNode: _focusNode,
+                ),
+                NotesScreenTextField(
+                  bloc: bloc,
+                  focusNode: _focusNode,
                   controller: messageController,
                   onChanged: (_) {
                     print(messageController.text.isEmpty);
@@ -77,42 +81,8 @@ class _NotesScreenState extends State<NotesScreen> {
                       },
                     );
                   },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.camera_alt,
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        showImagePickerModal(
-                          context: context,
-                          bloc: bloc,
-                        );
-                      },
-                    ),
-                    prefixIcon: Directionality(
-                      textDirection: TextDirection.ltr,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.send,
-                          size: 30,
-                          color: sendButtonColor,
-                        ),
-                        onPressed:
-                            messageController.text.isEmpty ? null : () {},
-                      ),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'یادداشت خود را بگذارید',
-                    hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.grey,
-                        ),
-                  ),
+                  onSendPressed: () {},
+                  sendButtonColor: sendButtonColor,
                 ),
               ],
             ),

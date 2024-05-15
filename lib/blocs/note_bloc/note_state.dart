@@ -11,4 +11,6 @@ final class NoteInitial extends NoteState {}
 
 class NoteSuccess extends NoteState {}
 
+class NoteEmpty extends NoteState {}
+
 class NoteFailed extends NoteState {}
