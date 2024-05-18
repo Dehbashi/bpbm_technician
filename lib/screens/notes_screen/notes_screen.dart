@@ -1,9 +1,10 @@
-import 'package:bpbm_technician/blocs/note_bloc/note_bloc.dart';
+import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_header.dart';
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_messages.dart';
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persian/persian.dart';
 
 class NotesScreen extends StatefulWidget {
   final int orderId;
@@ -19,7 +20,7 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  late NoteBloc bloc;
+  late CommentBloc bloc;
   late TextEditingController messageController;
   FocusNode _focusNode = FocusNode();
   Color sendButtonColor = Colors.grey;
@@ -27,8 +28,8 @@ class _NotesScreenState extends State<NotesScreen> {
   @override
   void initState() {
     super.initState();
-    bloc = BlocProvider.of<NoteBloc>(context);
-    bloc.add(NoteStarted());
+    bloc = BlocProvider.of<CommentBloc>(context);
+    bloc.add(CommentStarted(orderId: widget.orderId));
     messageController = TextEditingController();
   }
 
@@ -41,13 +42,14 @@ class _NotesScreenState extends State<NotesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NoteBloc, NoteState>(
+    return BlocBuilder<CommentBloc, CommentState>(
       builder: (context, state) {
-        if (state is NoteFailed) {
+        if (state is CommentFailed) {
           return Center(
             child: Text('خطا در بارگذاری یادداشت ها'),
           );
-        } else if (state is NoteSuccess) {
+        } else if (state is CommentSuccess) {
+          final comments = state.comments;
           return Container(
             width: double.infinity,
             margin: const EdgeInsets.all(5),
@@ -58,15 +60,24 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 NotesScreenHeader(
                   orderId: widget.orderId,
                   orderTitle: widget.orderTitle,
                 ),
-                NotesScreenMessages(
-                  messageController: messageController,
-                  focusNode: _focusNode,
-                ),
+                if (comments.isNotEmpty)
+                  NotesScreenMessages(
+                    comments: comments,
+                    messageController: messageController,
+                    focusNode: _focusNode,
+                  ),
+                if (comments.isEmpty)
+                  Center(
+                    child: Text(
+                      'برای این سفارش یادداشتی وجود ندارد',
+                    ),
+                  ),
                 NotesScreenTextField(
                   bloc: bloc,
                   focusNode: _focusNode,
@@ -81,7 +92,18 @@ class _NotesScreenState extends State<NotesScreen> {
                       },
                     );
                   },
-                  onSendPressed: () {},
+                  onSendPressed: () {
+                    bloc.add(
+                      SendComment(
+                        orderId: widget.orderId,
+                        text: messageController.text,
+                      ),
+                    );
+                    messageController.clear();
+                    setState(() {
+                      sendButtonColor = Colors.grey;
+                    });
+                  },
                   sendButtonColor: sendButtonColor,
                 ),
               ],

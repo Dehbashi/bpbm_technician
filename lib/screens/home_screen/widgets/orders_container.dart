@@ -1,3 +1,4 @@
+import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
 import 'package:bpbm_technician/blocs/note_bloc/note_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +79,7 @@ class OrdersContainer extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => BlocProvider(
-                            create: (context) => NoteBloc(),
+                            create: (context) => CommentBloc(context),
                             child: NotesScreen(
                               orderId: order.id,
                               orderTitle: order.service,

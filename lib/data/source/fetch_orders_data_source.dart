@@ -46,8 +46,8 @@ class FetchOrdersRemoteDataSource implements IFetchOrdersDataSource {
 
   @override
   Future<OrderDetails> fetchOrderDetails({required int id}) async {
-    final url = Uri.parse(
-        'https://s1.lianerp.com/api/public/provider/order/show?id=$id');
+    final url =
+        Uri.parse('https://s1.lianerp.com/api/public/provider/order/show');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('token');
     final _ip = prefs.getString('ip');
@@ -58,9 +58,13 @@ class FetchOrdersRemoteDataSource implements IFetchOrdersDataSource {
       'Authorization': 'Bearer $_token',
       'Content-Type': 'application/json',
     };
-    final response = await http.get(
+    final body = jsonEncode({
+      'id': id,
+    });
+    final response = await http.post(
       url,
       headers: headers,
+      body: body,
     );
 
     if (response.statusCode == 200) {

@@ -1,8 +1,12 @@
-import 'package:bpbm_technician/blocs/note_bloc/note_bloc.dart';
+import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
-Future<void> showImagePickerModal(
-    {required BuildContext context, required NoteBloc bloc}) async {
+Future<void> showImagePickerModal({
+  required BuildContext context,
+  required CommentBloc bloc,
+}) async {
   await showModalBottomSheet(
     backgroundColor: Theme.of(context).colorScheme.primary,
     context: context,
@@ -11,24 +15,65 @@ Future<void> showImagePickerModal(
         children: [
           _ModalSheeListWidget(
             text: 'باز کردن دوربین',
-            onTap: () {
-              bloc.add(
-                AttachImageFromCamera(),
-              );
+            onTap: () async {
+              final cameraFile = await bloc.getImageFromCamera();
+              Navigator.of(context).pop();
+              // if (cameraFile != null && cameraFile != '') {
+              //   showAttachmentModal(
+              //       attachments: [cameraFile], context: context);
+              // }
             },
           ),
           _ModalSheeListWidget(
             text: 'انتخاب از گالری',
-            onTap: () {
-              bloc.add(
-                AttachImageFromGallery(),
-              );
+            onTap: () async {
+              final galleryFiles = await bloc.getImagesFromGallery();
+              Navigator.of(context).pop();
+              // if (galleryFiles != null && galleryFiles.isNotEmpty) {
+              //   showAttachmentModal(
+              //       attachments: galleryFiles, context: context);
+              // }
             },
           ),
         ],
       );
     },
   );
+}
+
+Future<void> showAttachmentModal({
+  required List<XFile>? attachments,
+  required BuildContext context,
+}) async {
+  if (attachments != null && attachments.isNotEmpty) {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.2,
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 20,
+              mainAxisSpacing: 20
+            ),
+            itemCount: attachments.length,
+            itemBuilder: (context, index) {
+              final attachment = attachments[index];
+              return IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.attachment,
+                  size: 20,
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _ModalSheeListWidget extends StatelessWidget {

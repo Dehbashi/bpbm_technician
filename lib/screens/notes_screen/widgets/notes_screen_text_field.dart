@@ -1,9 +1,9 @@
-import 'package:bpbm_technician/blocs/note_bloc/note_bloc.dart';
+import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
 import 'package:bpbm_technician/screens/notes_screen/methods/show_image_picker_modal.dart';
 import 'package:flutter/material.dart';
 
 class NotesScreenTextField extends StatelessWidget {
-  final NoteBloc bloc;
+  final CommentBloc bloc;
   final TextEditingController controller;
   final Function(String) onChanged;
   final Function() onSendPressed;
@@ -26,6 +26,9 @@ class NotesScreenTextField extends StatelessWidget {
       focusNode: focusNode,
       controller: controller,
       onChanged: onChanged,
+      // expands: true,
+      // maxLines: null,
+      // minLines: null,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -36,8 +39,8 @@ class NotesScreenTextField extends StatelessWidget {
             Icons.camera_alt,
             size: 30,
           ),
-          onPressed: () {
-            showImagePickerModal(
+          onPressed: () async {
+            await showImagePickerModal(
               context: context,
               bloc: bloc,
             );

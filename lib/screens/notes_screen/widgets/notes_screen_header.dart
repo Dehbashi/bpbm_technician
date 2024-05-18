@@ -16,7 +16,7 @@ class NotesScreenHeader extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(

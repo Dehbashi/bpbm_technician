@@ -65,7 +65,7 @@ class AppTheme {
       colorScheme: ColorScheme.light(
         primary: Color(0xffcdeef0),
         onPrimary: Color(0xff04a8b2),
-        secondary: Color.fromARGB(255, 224, 216, 216),
+        secondary: Color.fromARGB(255, 243, 244, 232),
       ),
       useMaterial3: true,
     );

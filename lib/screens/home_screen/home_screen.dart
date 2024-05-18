@@ -89,7 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (status == 3 ||
                         status == 4 ||
                         status == 6 ||
-                        status == 7) {
+                        status == 7 ||
+                        status == 1 ||
+                        status == 2 ||
+                        status == 5 ||
+                        status == 8) {
                       return OrdersContainer(
                         order: order,
                         orderDetails: orderDetails,
