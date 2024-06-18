@@ -32,11 +32,18 @@ class FetchOrdersRemoteDataSource implements IFetchOrdersDataSource {
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
-      final List<dynamic> data = jsonData['data']['data'];
+      final List<dynamic> data = jsonData['data']['data'] as List<dynamic>;
 
-      final List<Order> orders = data
-          .map((item) => Order.fromJson(item as Map<String, dynamic>))
-          .toList();
+      List<Order> orders = [];
+
+      for (var item in data) {
+        orders.add(Order.fromJson(item));
+      }
+      print(orders);
+
+      // final List<Order> orders = data
+      //     .map((item) => Order.fromJson(item as Map<String, dynamic>))
+      //     .toList();
 
       return orders;
     } else {

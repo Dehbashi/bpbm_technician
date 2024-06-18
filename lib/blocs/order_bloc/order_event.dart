@@ -8,3 +8,12 @@ sealed class OrderEvent extends Equatable {
 }
 
 class OrderStarted extends OrderEvent {}
+
+// class OrderDetailStarted extends OrderEvent {
+//   final int orderId;
+
+//   OrderDetailStarted({required this.orderId});
+
+//   @override
+//   List<Object> get props => [orderId];
+// }

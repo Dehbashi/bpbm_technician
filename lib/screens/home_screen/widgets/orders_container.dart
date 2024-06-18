@@ -1,23 +1,17 @@
 import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
-import 'package:bpbm_technician/blocs/note_bloc/note_bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bpbm_technician/screens/home_screen/widgets/order_detail_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:bpbm_technician/common/constants_2.dart';
-import 'package:bpbm_technician/data/models/orders/detail_order.dart';
 import 'package:bpbm_technician/data/models/orders/order_model.dart';
-import 'package:bpbm_technician/screens/home_screen/widgets/order_detail_button.dart';
 import 'package:bpbm_technician/screens/notes_screen/notes_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persian/persian.dart';
 
 class OrdersContainer extends StatelessWidget {
   final Order order;
-  final OrderDetails orderDetails;
   const OrdersContainer({
     super.key,
     required this.order,
-    required this.orderDetails,
   });
 
   @override
@@ -50,7 +44,7 @@ class OrdersContainer extends StatelessWidget {
         data: ThemeData().copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           title: Text(
-            'سفارش شماره ${order.id.toString().withPersianNumbers()}: ${order.service}',
+            'سفارش شماره ${order.id.toString().withPersianNumbers()}: ${order.service} (${order.customerName})',
             style: TextStyle(
               fontFamily: 'iransans',
               fontWeight: FontWeight.bold,
@@ -68,9 +62,21 @@ class OrdersContainer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                OrderDetailButton(
-                  order: order,
-                  orderDetails: orderDetails,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => OrderDetailContainer(
+                            orderId: order.id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text('جزئیات'),
+                    style: Constants.getElevatedButtonStyle(ButtonType.details),
+                  ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.4,

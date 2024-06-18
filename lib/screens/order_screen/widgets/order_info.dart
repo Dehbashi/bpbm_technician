@@ -19,7 +19,7 @@ class OrderInfo extends StatelessWidget {
           );
         } else if (state is OrderSuccess) {
           final orders = state.orders;
-          final listOfOrderDetails = state.orderDetails;
+          // final listOfOrderDetails = state.orderDetails;
           return Container(
             margin: EdgeInsets.all(10),
             // height: 400,
@@ -30,24 +30,12 @@ class OrderInfo extends StatelessWidget {
               itemBuilder: (context, index) {
                 final indexFromLast = orders.length - index - 1;
                 final order = orders[indexFromLast];
-                final orderDetails = listOfOrderDetails[indexFromLast];
-                final status = orderDetails.orderStatus;
-                if (
-                    // status == 3 ||
-                    // status == 4 ||
-                    // status == 6 ||
-                    // status == 7 ||
-                    status == 8 ||
-                        // status == 9 ||
-                        // status == 1 ||
-                        status == 2) {
-                  return OrdersContainer(
-                    order: order,
-                    orderDetails: orderDetails,
-                  );
-                } else {
-                  return Container();
-                }
+                // final orderDetails = listOfOrderDetails[indexFromLast];
+                // final status = orderDetails.orderStatus;
+
+                return OrdersContainer(
+                  order: order,
+                );
               },
             ),
           );

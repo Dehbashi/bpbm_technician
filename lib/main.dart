@@ -1,3 +1,4 @@
+import 'package:bpbm_technician/blocs/order_detail_bloc/order_detail_bloc.dart';
 import 'package:bpbm_technician/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
             return bloc;
           },
         ),
+        BlocProvider(create: (context) => OrderDetailBloc())
       ],
       child: MaterialApp(
         title: 'بسپارش به ما (متخصص)',

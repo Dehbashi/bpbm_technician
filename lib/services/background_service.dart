@@ -30,7 +30,7 @@ const _stopKey = 'stop';
 
 class LocationService {
   static final _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
   static final _foregroundService = FlutterBackgroundService();
 
   static Future<void> initialize() async {
@@ -39,7 +39,7 @@ class LocationService {
 
     await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
+        AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(kLocationServiceChannel);
 
     await _foregroundService.configure(
@@ -96,76 +96,9 @@ void _onStart(ServiceInstance service) async {
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  // void checkApiResponse() async {
-  //   final apiUrl = 'https://example.com/api/endpoint';
-  //   final locationApiUrl =
-  //       'https://s1.lianerp.com/api/public/provider/log-location';
-
-  //   try {
-  //     final position = await Geolocator.getCurrentPosition();
-  //     final latitude = position.latitude;
-  //     final longitude = position.longitude;
-
-  //     SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     final _token = prefs.getString('token');
-  //     final _ip = prefs.getString('ip');
-  //     final _cellNumber = prefs.getString('cellNumber');
-  //     final _userAgent = prefs.getString('userAgent');
-
-  //     final headers = {
-  //       'Tokenpublic': 'bpbm',
-  //       'Authorization': 'Bearer $_token',
-  //       'Content-Type': 'application/json',
-  //     };
-
-  //     final body = jsonEncode({
-  //       'ip': _ip,
-  //       'phone_number': _cellNumber,
-  //       'userAgent': _userAgent,
-  //       'lat': latitude,
-  //       'lng': longitude,
-  //       'token': _token,
-  //     });
-
-  //     ///Getting coordinates request from the API
-  //     final response = await http.get(
-  //       Uri.parse(apiUrl),
-  //       headers: headers,
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       ///Sending coordinates to the API upon request
-  //       final locationResponse = await http.post(
-  //         Uri.parse(locationApiUrl),
-  //         body: body,
-  //         headers: headers,
-  //       );
-  //       if (locationResponse.statusCode == 200) {
-  //         // Location sent successfully.
-  //         print('Location sent successfully');
-  //       } else {
-  //         // Handle the location API error.
-  //         print('Location API error: ${locationResponse.statusCode}');
-  //       }
-  //     } else {
-  //       // Handle the API error.
-  //       print('API error: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   }
-  // }
-
-  // void startLocationUpdateTimer() {
-  //   const apiCheckInterval = Duration(seconds: 30);
-  //   Timer.periodic(apiCheckInterval, (timer) {
-  //     checkApiResponse();
-  //   });
-  // }
-
   final timer = Timer.periodic(
-    const Duration(minutes: 5),
-    (_) async {
+    const Duration(seconds: 5),
+        (_) async {
       final position = await Geolocator.getCurrentPosition();
 
       _sendToApi(position);
@@ -174,6 +107,7 @@ void _onStart(ServiceInstance service) async {
       print(text);
 
       flutterLocalNotificationsPlugin.show(
+        // 0,
         kLocationServiceNotificationId,
         'Location Service',
         'User Location$text',
@@ -197,7 +131,7 @@ void _onStart(ServiceInstance service) async {
 Future<void> _sendToApi(Position position) async {
   try {
     final url =
-        Uri.parse('https://s1.lianerp.com/api/public/provider/log-location');
+    Uri.parse('https://s1.lianerp.com/api/public/provider/log-location');
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('token');
