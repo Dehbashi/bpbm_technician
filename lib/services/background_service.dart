@@ -30,7 +30,8 @@ const _stopKey = 'stop';
 
 class LocationService {
   static final _flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
+  // static final _foregroundService = android.FlutterBackgroundServiceAndroid();
   static final _foregroundService = FlutterBackgroundService();
 
   static Future<void> initialize() async {
@@ -39,7 +40,7 @@ class LocationService {
 
     await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(kLocationServiceChannel);
 
     await _foregroundService.configure(
@@ -79,6 +80,7 @@ class LocationService {
 
   static Future<void> start() async {
     await _foregroundService.startService();
+    // await _foregroundService.start();
   }
 
   static Future<void> stop() async {
@@ -87,6 +89,8 @@ class LocationService {
   }
 
   static Future<bool> get isServiceRunning => _foregroundService.isRunning();
+  // static Future<bool> get isServiceRunning =>
+  //     _foregroundService.isServiceRunning();
 }
 
 @pragma('vm:entry-point')
@@ -98,7 +102,7 @@ void _onStart(ServiceInstance service) async {
 
   final timer = Timer.periodic(
     const Duration(seconds: 5),
-        (_) async {
+    (_) async {
       final position = await Geolocator.getCurrentPosition();
 
       _sendToApi(position);
@@ -131,7 +135,7 @@ void _onStart(ServiceInstance service) async {
 Future<void> _sendToApi(Position position) async {
   try {
     final url =
-    Uri.parse('https://s1.lianerp.com/api/public/provider/log-location');
+        Uri.parse('https://s1.lianerp.com/api/public/provider/log-location');
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final _token = prefs.getString('token');

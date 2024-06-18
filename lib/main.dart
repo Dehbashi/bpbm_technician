@@ -21,6 +21,19 @@ void main() async {
   );
 }
 
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await FlutterForegroundTask.startService(
+//   notificationTitle: 'My Foreground Service',
+//   notificationText: 'Running...',
+//   callback: myTaskCallback,
+// );
+//   authRepository.loadUserInfo();
+//   runApp(
+//     const MyApp(),
+//   );
+// }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
