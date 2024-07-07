@@ -18,7 +18,9 @@ class SendCommentModel {
   });
 
   SendCommentModel.fromJson(Map<String, dynamic> json)
-      : orderId = json['order_id'],
+      : orderId = (json['order_id'] is String)
+            ? int.parse(json['order_id'])
+            : json['order_id'],
         text = json['text'],
         type = json['type'],
         userId = json['user_id'],

@@ -69,7 +69,8 @@ class CommentRemoteDataSource implements ICommentDataSource {
     final headers = {
       'Authorization': 'Bearer $token',
       'Tokenpublic': 'bpbm',
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
+      'Accept': 'application/json, text/plain, */*',
     };
     // final body = jsonEncode({
     //   'id': orderId,
@@ -82,13 +83,14 @@ class CommentRemoteDataSource implements ICommentDataSource {
     request.headers.addAll(headers);
     request.fields['id'] = orderId.toString();
     request.fields['text'] = text;
+    request.fields['type'] = 'normal';
 
     for (var attachment in attachments) {
       var stream =
           http.ByteStream(Stream.castFrom(await attachment.openRead()));
       var length = await attachment.length();
       var multipartFile = http.MultipartFile(
-        'attach',
+        'file',
         stream,
         length,
         filename: basename(attachment.path),
@@ -103,18 +105,21 @@ class CommentRemoteDataSource implements ICommentDataSource {
       request.files.add(multipartFile);
     }
 
-    print(request.fields);
-    print(request.files);
+    // print(request.fields);
+    // print(request.files);
 
     final response = await request.send();
+    // final data = await response.stream.bytesToString();
+    // print(jsonDecode(data));
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      // final data = jsonDecode(response.body);
       final responseBody = await response.stream.bytesToString();
       final data = jsonDecode(responseBody);
-      print(responseBody);
+      // print(responseBody);
       final mainData = data['data']['data'];
+      print(mainData);
+      print(mainData['attach']);
       final sendComment = SendCommentModel.fromJson(mainData);
       return sendComment;
     } else {

@@ -116,6 +116,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
             );
           });
         }).catchError((e) {
+          print(e.toString());
           userAttachments.clear();
           prefs.remove('pickedFilePath');
           prefs.remove('imagesPaths');
