@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:bpbm_technician/data/models/comment_model/comment_model.dart';
 import 'package:bpbm_technician/data/models/comment_model/file_model.dart';
 import 'package:bpbm_technician/data/models/send_comment_model.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker_plus/multi_image_picker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 abstract class ICommentDataSource {
   Future<List<CommentModel>> fetchComments({required int orderId});
@@ -68,11 +71,11 @@ class CommentRemoteDataSource implements ICommentDataSource {
       'Tokenpublic': 'bpbm',
       'Content-Type': 'application/json',
     };
-    final body = jsonEncode({
-      'id': orderId,
-      'text': text,
-      // 'attach': attachments,
-    });
+    // final body = jsonEncode({
+    //   'id': orderId,
+    //   'text': text,
+    //   // 'attach': attachments,
+    // });
     // final response = await http.post(url, headers: headers, body: body);
 
     var request = http.MultipartRequest('POST', url);
@@ -88,11 +91,20 @@ class CommentRemoteDataSource implements ICommentDataSource {
         'attach',
         stream,
         length,
-        filename: attachment.path.split('/').last,
+        filename: basename(attachment.path),
+        // filename: attachment.path.split('/').last,
       );
+      // var multipartFile = http.MultipartFile(
+      //   'attach',
+      //   attachment.readAsBytes().asStream(),
+      //   await attachment.length(),
+      //   filename: attachment.path.split('/').last,
+      // );
       request.files.add(multipartFile);
     }
-    print(attachments.length);
+
+    print(request.fields);
+    print(request.files);
 
     final response = await request.send();
     print(response.statusCode);

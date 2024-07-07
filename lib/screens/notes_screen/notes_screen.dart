@@ -4,6 +4,7 @@ import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_messag
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:persian/persian.dart';
 
 class NotesScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _NotesScreenState extends State<NotesScreen> {
   late TextEditingController messageController;
   FocusNode _focusNode = FocusNode();
   Color sendButtonColor = Colors.grey;
+  List<XFile> userAttachments = [];
 
   @override
   void initState() {
@@ -50,6 +52,8 @@ class _NotesScreenState extends State<NotesScreen> {
           );
         } else if (state is CommentSuccess) {
           final comments = state.comments;
+          // final attachments = state.attachments;
+          // print('attachments are: $attachments');
           return Container(
             width: double.infinity,
             margin: const EdgeInsets.all(5),
@@ -82,6 +86,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   bloc: bloc,
                   focusNode: _focusNode,
                   controller: messageController,
+                  userAttachments: userAttachments,
                   onChanged: (_) {
                     print(messageController.text.isEmpty);
                     setState(
@@ -93,10 +98,13 @@ class _NotesScreenState extends State<NotesScreen> {
                     );
                   },
                   onSendPressed: () {
+                    _focusNode.unfocus();
+                    // userAttachments.clear();
                     bloc.add(
                       SendComment(
                         orderId: widget.orderId,
                         text: messageController.text,
+                        userAttachments: userAttachments,
                       ),
                     );
                     messageController.clear();

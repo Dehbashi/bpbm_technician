@@ -59,6 +59,8 @@ dependencies:
   multi_image_picker_plus: ^0.0.4
   shamsi_date: ^1.0.2
   flutter_widget_from_html: ^0.14.11
+  file_picker: ^8.0.6
+  open_file: ^3.3.2
   # flutter_foreground_task: ^6.5.0
   # android_intent_plus: ^5.0.2
 

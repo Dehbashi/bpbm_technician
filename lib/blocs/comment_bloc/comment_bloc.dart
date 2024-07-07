@@ -4,9 +4,11 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:bpbm_technician/common/customer_error_messenger.dart';
 import 'package:bpbm_technician/common/dialogs/loading_screen.dart';
+import 'package:bpbm_technician/data/models/comment_model/attach_model.dart';
 import 'package:bpbm_technician/data/models/comment_model/comment_model.dart';
 import 'package:bpbm_technician/data/repo/comment_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,9 @@ part 'comment_state.dart';
 class CommentBloc extends Bloc<CommentEvent, CommentState> {
   final BuildContext context;
   CommentBloc(this.context) : super(CommentInitial()) {
+    List<XFile> userAttachments = [];
+    List<CommentModel> userComments = [];
+
     on<CommentEvent>((event, emit) async {
       if (event is CommentStarted) {
         LoadingScreen.instance().show(
@@ -29,7 +34,11 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
         await commentRepository
             .fetchComments(orderId: event.orderId)
             .then((comments) {
-          emit(CommentSuccess(comments: comments));
+          userComments = comments;
+          emit(CommentSuccess(
+            comments: userComments,
+            attachments: userAttachments,
+          ));
           LoadingScreen.instance().hide();
         }).catchError((e) {
           emit(CommentFailed());
@@ -41,20 +50,39 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
         });
       }
 
+      // if (event is SelectAttachment) {
+      //   // SharedPreferences prefs = await SharedPreferences.getInstance();
+      //   final cameraImage = await loadCameraImage();
+      //   if (cameraImage != null && cameraImage != '') {
+      //     userAttachments.add(cameraImage);
+      //   }
+      //   final galleryImages = await loadGalleryImages();
+      //   if (galleryImages != null && galleryImages.isNotEmpty) {
+      //     userAttachments.addAll(galleryImages);
+      //   }
+
+      //   emit(
+      //     CommentSuccess(
+      //       comments: userComments,
+      //       attachments: userAttachments,
+      //     ),
+      //   );
+      // }
+
       if (event is SendComment) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        List<XFile> attachments = [];
+        // List<XFile> attachments = [];
         LoadingScreen.instance().show(
           context: context,
           text: 'در حال ارسال پیام',
         );
 
-        final cameraImage = await loadCameraImage();
-        if (cameraImage != null && cameraImage != '')
-          attachments.add(cameraImage);
-        final galleryImages = await loadGalleryImages();
-        if (galleryImages != null && galleryImages.isNotEmpty)
-          attachments.addAll(galleryImages);
+        // final cameraImage = await loadCameraImage();
+        // if (cameraImage != null && cameraImage != '')
+        //   userAttachments.add(cameraImage);
+        // final galleryImages = await loadGalleryImages();
+        // if (galleryImages != null && galleryImages.isNotEmpty)
+        //   userAttachments.addAll(galleryImages);
 
         // if (cameraImage != null) await upload(File(cameraImage.path));
 
@@ -62,19 +90,23 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
             .sendComment(
           text: event.text,
           orderId: event.orderId,
-          attachments: attachments,
+          attachments: event.userAttachments,
         )
             .then((comment) async {
           await commentRepository
               .fetchComments(orderId: event.orderId)
               .then((comments) {
-            emit(CommentSuccess(comments: comments));
-            attachments.clear();
+            userComments = comments;
+            emit(CommentSuccess(
+              comments: userComments,
+              attachments: userAttachments,
+            ));
+            userAttachments.clear();
             prefs.remove('pickedFilePath');
             prefs.remove('imagesPaths');
             LoadingScreen.instance().hide();
           }).catchError((e) {
-            attachments.clear();
+            userAttachments.clear();
             prefs.remove('pickedFilePath');
             prefs.remove('imagesPaths');
             LoadingScreen.instance().hide();
@@ -84,7 +116,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
             );
           });
         }).catchError((e) {
-          attachments.clear();
+          userAttachments.clear();
           prefs.remove('pickedFilePath');
           prefs.remove('imagesPaths');
           LoadingScreen.instance().hide();
@@ -111,13 +143,45 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     }
   }
 
+  // Future<List<XFile>?> getImagesFromGallery() async {
+  //   List<XFile> images = [];
+  //   final picker = ImagePicker();
+  //   try {
+  //     images = await picker.pickMultiImage(limit: 10);
+  //     await saveImageFromGallery(images);
+  //     return images;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
+
   Future<List<XFile>?> getImagesFromGallery() async {
-    List<XFile> images = [];
+    List<XFile> files = [];
     final picker = ImagePicker();
+
     try {
-      images = await picker.pickMultiImage(limit: 10);
-      await saveImageFromGallery(images);
-      return images;
+      // Pick images using image_picker
+      // List<XFile>? images = await picker.pickMultiImage(limit: 3);
+      // if (images != null) {
+      //   files.addAll(images);
+      // }
+
+      // Pick PDFs using file_picker
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+        allowMultiple: true,
+      );
+
+      if (result != null) {
+        for (var pdf in result.files) {
+          files.add(XFile(pdf.path!));
+        }
+      }
+
+      // Save the files (both images and PDFs)
+      await saveImageFromGallery(files);
+      return files;
     } catch (e) {
       return null;
     }
@@ -183,34 +247,34 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     }
   }
 
-  upload(File imageFile) async {
-    // open a bytestream
-    var stream =
-        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-    // get file length
-    var length = await imageFile.length();
+  // upload(File imageFile) async {
+  //   // open a bytestream
+  //   var stream =
+  //       new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+  //   // get file length
+  //   var length = await imageFile.length();
 
-    // string to uri
-    var uri =
-        Uri.parse("https://s1.lianerp.com/api/public/provider/order/show");
+  //   // string to uri
+  //   var uri =
+  //       Uri.parse("https://s1.lianerp.com/api/public/provider/order/show");
 
-    // create multipart request
-    var request = new http.MultipartRequest("POST", uri);
+  //   // create multipart request
+  //   var request = new http.MultipartRequest("POST", uri);
 
-    // multipart that takes file
-    var multipartFile = new http.MultipartFile('file', stream, length,
-        filename: basename(imageFile.path));
+  //   // multipart that takes file
+  //   var multipartFile = new http.MultipartFile('file', stream, length,
+  //       filename: basename(imageFile.path));
 
-    // add file to multipart
-    request.files.add(multipartFile);
+  //   // add file to multipart
+  //   request.files.add(multipartFile);
 
-    // send
-    var response = await request.send();
-    print(response.statusCode);
+  //   // send
+  //   var response = await request.send();
+  //   print(response.statusCode);
 
-    // listen for response
-    response.stream.transform(utf8.decoder).listen((value) {
-      print(value);
-    });
-  }
+  //   // listen for response
+  //   response.stream.transform(utf8.decoder).listen((value) {
+  //     print(value);
+  //   });
+  // }
 }

@@ -1,10 +1,10 @@
 import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 Future<void> showImagePickerModal({
   required BuildContext context,
+  required List<XFile> userAttachments,
   required CommentBloc bloc,
 }) async {
   await showModalBottomSheet(
@@ -17,6 +17,10 @@ Future<void> showImagePickerModal({
             text: 'باز کردن دوربین',
             onTap: () async {
               final cameraFile = await bloc.getImageFromCamera();
+              if (cameraFile != null) {
+                userAttachments.add(cameraFile);
+              }
+              print(userAttachments);
               Navigator.of(context).pop();
               // if (cameraFile != null && cameraFile != '') {
               //   showAttachmentModal(
@@ -28,6 +32,10 @@ Future<void> showImagePickerModal({
             text: 'انتخاب از گالری',
             onTap: () async {
               final galleryFiles = await bloc.getImagesFromGallery();
+              if (galleryFiles != null && galleryFiles.isNotEmpty) {
+                userAttachments.addAll(galleryFiles);
+              }
+              print(userAttachments);
               Navigator.of(context).pop();
               // if (galleryFiles != null && galleryFiles.isNotEmpty) {
               //   showAttachmentModal(
@@ -54,10 +62,7 @@ Future<void> showAttachmentModal({
           height: MediaQuery.of(context).size.height * 0.2,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20
-            ),
+                crossAxisCount: 4, crossAxisSpacing: 20, mainAxisSpacing: 20),
             itemCount: attachments.length,
             itemBuilder: (context, index) {
               final attachment = attachments[index];

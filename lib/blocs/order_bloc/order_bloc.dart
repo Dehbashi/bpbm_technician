@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
-import 'package:bpbm_technician/data/models/orders/detail_order.dart';
 import 'package:bpbm_technician/data/models/orders/order_model.dart';
 import 'package:bpbm_technician/data/repo/fetch_orders_repository.dart';
 
@@ -19,12 +18,12 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
             if (orders.isNotEmpty) {
               List<Order> activeOrders = [];
               for (var order in orders) {
-                if (order.order_status == 3 ||
-                    order.order_status == 4 ||
-                    order.order_status == 6 ||
-                    order.order_status == 7) {
-                  activeOrders.add(order);
-                }
+                // if (order.order_status == 3 ||
+                //     order.order_status == 4 ||
+                //     order.order_status == 6 ||
+                //     order.order_status == 7) {
+                activeOrders.add(order);
+                // }
               }
               if (activeOrders.isNotEmpty) {
                 emit(OrderSuccess(
