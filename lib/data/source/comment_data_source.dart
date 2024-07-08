@@ -66,10 +66,15 @@ class CommentRemoteDataSource implements ICommentDataSource {
     final token = prefs.getString('token');
     final url = Uri.parse(
         'https://s1.lianerp.com/api/public/provider/order/send-comment');
+    // final url =
+    //     Uri.parse('https://s1.lianerp.com/api/shopmaker/order/comment/send');
     final headers = {
       'Authorization': 'Bearer $token',
       'Tokenpublic': 'bpbm',
-      'Content-Type': 'multipart/form-data',
+      // 'Authorizationserver':
+      //     'Bearer 2669|yzFaepWCMUIhmEuGMaaLInGXQweAoYUpWGdFYNnm',
+      // 'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json',
       'Accept': 'application/json, text/plain, */*',
     };
     // final body = jsonEncode({
@@ -82,6 +87,7 @@ class CommentRemoteDataSource implements ICommentDataSource {
     var request = http.MultipartRequest('POST', url);
     request.headers.addAll(headers);
     request.fields['id'] = orderId.toString();
+    // request.fields['data_id'] = orderId.toString();
     request.fields['text'] = text;
     request.fields['type'] = 'normal';
 
@@ -90,7 +96,7 @@ class CommentRemoteDataSource implements ICommentDataSource {
           http.ByteStream(Stream.castFrom(await attachment.openRead()));
       var length = await attachment.length();
       var multipartFile = http.MultipartFile(
-        'file',
+        'file[]',
         stream,
         length,
         filename: basename(attachment.path),
@@ -105,20 +111,20 @@ class CommentRemoteDataSource implements ICommentDataSource {
       request.files.add(multipartFile);
     }
 
-    // print(request.fields);
-    // print(request.files);
+    print(request.fields);
+    print(request.files);
 
     final response = await request.send();
     // final data = await response.stream.bytesToString();
     // print(jsonDecode(data));
-    print(response.statusCode);
+    // print(response.statusCode);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final responseBody = await response.stream.bytesToString();
       final data = jsonDecode(responseBody);
-      // print(responseBody);
+      print(responseBody);
       final mainData = data['data']['data'];
-      print(mainData);
+      // final mainData = data;
       print(mainData['attach']);
       final sendComment = SendCommentModel.fromJson(mainData);
       return sendComment;

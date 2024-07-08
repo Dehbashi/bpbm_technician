@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bpbm_technician/common/dialogs/loading_screen.dart';
-import 'package:bpbm_technician/data/models/orders/detail_order.dart';
+import 'package:bpbm_technician/data/models/orders/order_detail.dart';
 import 'package:bpbm_technician/data/repo/fetch_orders_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';

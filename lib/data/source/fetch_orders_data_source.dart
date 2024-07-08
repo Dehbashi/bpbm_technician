@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:bpbm_technician/data/models/orders/detail_order.dart';
+import 'package:bpbm_technician/data/models/orders/order_detail.dart';
 import 'package:bpbm_technician/data/models/orders/order_model.dart';
 
 abstract class IFetchOrdersDataSource {

@@ -1,4 +1,4 @@
-import 'package:bpbm_technician/data/models/orders/detail_order.dart';
+import 'package:bpbm_technician/data/models/orders/order_detail.dart';
 import 'package:bpbm_technician/data/models/orders/order_model.dart';
 import 'package:bpbm_technician/data/source/fetch_orders_data_source.dart';
 

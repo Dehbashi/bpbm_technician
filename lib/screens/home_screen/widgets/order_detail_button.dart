@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persian/persian.dart';
 import 'package:bpbm_technician/common/constants_2.dart';
-import 'package:bpbm_technician/data/models/orders/detail_order.dart';
+import 'package:bpbm_technician/data/models/orders/order_detail.dart';
 import 'package:bpbm_technician/data/models/orders/order_model.dart';
 import 'package:bpbm_technician/screens/home_screen/widgets/order_state_buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
