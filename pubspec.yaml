@@ -61,6 +61,7 @@ dependencies:
   flutter_widget_from_html: ^0.14.11
   file_picker: ^8.0.6
   open_file: ^3.3.2
+  persian_number_utility: ^1.1.4
   # flutter_foreground_task: ^6.5.0
   # android_intent_plus: ^5.0.2
 

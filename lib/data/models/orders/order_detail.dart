@@ -1,21 +1,45 @@
+import 'package:bpbm_technician/data/models/orders/order_detail_invoice_model.dart';
+
 class OrderDetails {
   final int id;
+  final int orderDataId;
+  final int serviceId;
   final int userId;
   final int priceServices;
   final String priceProduct;
   final String transportationCost;
+  final int tax;
+  final String discount;
   final String totalPrice;
+  final int addressId;
   final String date;
   final String time;
+  final String text;
   final int status;
   final int orderStatus;
+  final int pull;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? deletedAt;
   final List items;
   final dynamic address;
   final dynamic service;
   final dynamic user;
   final String? notes;
+  final OrderDetailInvoiceModel invoice;
 
   OrderDetails({
+    required this.orderDataId,
+    required this.serviceId,
+    required this.tax,
+    required this.discount,
+    required this.addressId,
+    required this.text,
+    required this.pull,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.deletedAt,
+    required this.invoice,
     required this.id,
     required this.userId,
     required this.priceServices,
@@ -50,6 +74,17 @@ class OrderDetails {
       service: json["service"],
       user: json["user"],
       notes: json["text"],
+      orderDataId: json['order_data_id'],
+      serviceId: json['service_id'],
+      tax: json['tax'],
+      discount: json['discount'],
+      addressId: json['address_id'],
+      text: json['text'],
+      pull: json['pull'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      deletedAt: json['deleted_at'],
+      invoice: OrderDetailInvoiceModel.fromJson(json['factor']),
     );
   }
 }

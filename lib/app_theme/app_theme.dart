@@ -17,6 +17,11 @@ class AppTheme {
         ),
         type: BottomNavigationBarType.fixed,
       ),
+      expansionTileTheme: ExpansionTileThemeData(
+        shape: OutlineInputBorder(
+          borderSide: BorderSide.none,
+        ),
+      ),
       appBarTheme: AppBarTheme(
         elevation: 2,
         shadowColor: Colors.black54,

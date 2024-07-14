@@ -76,10 +76,9 @@ class FetchOrdersRemoteDataSource implements IFetchOrdersDataSource {
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
-      final dynamic data = jsonData['data']['order'];
+      final dynamic data = jsonData['data']['order'] as Map<String, dynamic>;
 
-      final OrderDetails orderDetails =
-          OrderDetails.fromJson(data as Map<String, dynamic>);
+      final OrderDetails orderDetails = OrderDetails.fromJson(data);
 
       return orderDetails;
     } else {

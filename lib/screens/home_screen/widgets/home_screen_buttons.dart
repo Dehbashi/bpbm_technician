@@ -77,7 +77,7 @@ class _HomeScreenButtonsState extends State<HomeScreenButtons> {
           height: 20,
         ),
         Container(
-          // margin: EdgeInsets.only(bottom: 40),
+          margin: EdgeInsets.only(bottom: 20),
           width: 200,
           // height: 60,
           child: ElevatedButton(

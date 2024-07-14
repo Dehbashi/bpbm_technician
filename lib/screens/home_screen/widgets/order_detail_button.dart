@@ -1,3 +1,4 @@
+import 'package:bpbm_technician/screens/order_screen/order_invoice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persian/persian.dart';
 import 'package:bpbm_technician/common/constants_2.dart';
@@ -180,9 +181,26 @@ class OrderDetailButton extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 22,
                             fontFamily: 'iransans',
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => OrderInvoiceScreen(
+                              orderDetails: orderDetails,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text('مشاهده آخرین پیش‌فاکتور مشتری'),
+                      style: Constants.getElevatedButtonStyle(ButtonType.notes),
                     ),
                   ],
                 ),
