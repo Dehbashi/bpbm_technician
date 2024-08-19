@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:bpbm_technician/data/models/orders/invoice_item_model.dart';
 
 class OrderDetailInvoiceModel {
@@ -68,4 +70,59 @@ class OrderDetailInvoiceModel {
         items = (json['items'] as List<dynamic>).map((item) {
           return InvoiceItemModel.fromJson(item);
         }).toList();
+
+  @override
+  String toString() {
+    return 'OrderDetailInvoiceModel(id: $id, type: $type, title: $title, text: $text, orderId: $orderId, paymentTerm: $paymentTerm, numberBank: $numberBank, description: $description, effectiveTo: $effectiveTo, tax: $tax, discount: $discount, status: $status, versionStatus: $versionStatus, flagResult: $flagResult, hoferStatus: $hoferStatus, payStatus: $payStatus, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, items: $items)';
+  }
+
+  @override
+  bool operator ==(covariant OrderDetailInvoiceModel other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.type == type &&
+        other.title == title &&
+        other.text == text &&
+        other.orderId == orderId &&
+        other.paymentTerm == paymentTerm &&
+        other.numberBank == numberBank &&
+        other.description == description &&
+        other.effectiveTo == effectiveTo &&
+        other.tax == tax &&
+        other.discount == discount &&
+        other.status == status &&
+        other.versionStatus == versionStatus &&
+        other.flagResult == flagResult &&
+        other.hoferStatus == hoferStatus &&
+        other.payStatus == payStatus &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.deletedAt == deletedAt &&
+        listEquals(other.items, items);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        type.hashCode ^
+        title.hashCode ^
+        text.hashCode ^
+        orderId.hashCode ^
+        paymentTerm.hashCode ^
+        numberBank.hashCode ^
+        description.hashCode ^
+        effectiveTo.hashCode ^
+        tax.hashCode ^
+        discount.hashCode ^
+        status.hashCode ^
+        versionStatus.hashCode ^
+        flagResult.hashCode ^
+        hoferStatus.hashCode ^
+        payStatus.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode ^
+        deletedAt.hashCode ^
+        items.hashCode;
+  }
 }

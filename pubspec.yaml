@@ -62,6 +62,7 @@ dependencies:
   file_picker: ^8.0.6
   open_file: ^3.3.2
   persian_number_utility: ^1.1.4
+  maps_launcher: ^2.2.1
   # flutter_foreground_task: ^6.5.0
   # android_intent_plus: ^5.0.2
 

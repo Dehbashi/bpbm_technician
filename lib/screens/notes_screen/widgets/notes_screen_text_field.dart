@@ -43,13 +43,17 @@ class _NotesScreenTextFieldState extends State<NotesScreenTextField> {
         NotesScreenTextFieldAttachments(
           userAttachments: widget.userAttachments,
         ),
+        const SizedBox(height: 10),
         TextField(
           focusNode: widget.focusNode,
           controller: widget.controller,
           onChanged: widget.onChanged,
+          onTapOutside: (event) {
+            widget.focusNode.unfocus();
+          },
           // expands: true,
-          // maxLines: null,
-          // minLines: null,
+          maxLines: null,
+          minLines: null,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

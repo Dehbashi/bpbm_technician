@@ -1,3 +1,5 @@
+import 'package:bpbm_technician/blocs/order_bloc/order_bloc.dart';
+import 'package:bpbm_technician/blocs/order_detail_bloc/order_detail_bloc.dart';
 import 'package:bpbm_technician/common/constants.dart';
 import 'package:bpbm_technician/common/methods/navigator_method.dart';
 import 'package:bpbm_technician/screens/home_screen/home_screen.dart';
@@ -7,6 +9,7 @@ import 'package:bpbm_technician/screens/order_screen/order_screen.dart';
 import 'package:bpbm_technician/screens/profile_screen/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -78,37 +81,49 @@ class _MainScreenState extends State<MainScreen> {
         child: ProfileScreen(),
       ),
     ];
-    return PopScope(
-      canPop: false,
-      onPopInvoked: onWillPop,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: MainScreenAppBar(),
-        drawer: DrawerScreen(),
-        body: IndexedStack(
-          index: currentIndex,
-          children: screens,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: currentIndex,
-          items: bottomNavBarItem,
-          onTap: (index) {
-            final NavigatorState currentSelectedTabNavigatorState =
-                map[currentIndex]!.currentState!;
-            if (index == currentIndex) {
-              if (currentSelectedTabNavigatorState.canPop()) {
-                currentSelectedTabNavigatorState.popUntil((_) {
-                  return !currentSelectedTabNavigatorState.canPop();
-                });
-              }
-              return;
-            }
-            setState(() {
-              _history.remove(currentIndex);
-              _history.add(currentIndex);
-              currentIndex = index;
-            });
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) {
+            final bloc = OrderBloc();
+            bloc.add(OrderStarted());
+            return bloc;
           },
+        ),
+        BlocProvider(create: (context) => OrderDetailBloc())
+      ],
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: onWillPop,
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: MainScreenAppBar(),
+          drawer: DrawerScreen(),
+          body: IndexedStack(
+            index: currentIndex,
+            children: screens,
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: currentIndex,
+            items: bottomNavBarItem,
+            onTap: (index) {
+              final NavigatorState currentSelectedTabNavigatorState =
+                  map[currentIndex]!.currentState!;
+              if (index == currentIndex) {
+                if (currentSelectedTabNavigatorState.canPop()) {
+                  currentSelectedTabNavigatorState.popUntil((_) {
+                    return !currentSelectedTabNavigatorState.canPop();
+                  });
+                }
+                return;
+              }
+              setState(() {
+                _history.remove(currentIndex);
+                _history.add(currentIndex);
+                currentIndex = index;
+              });
+            },
+          ),
         ),
       ),
     );

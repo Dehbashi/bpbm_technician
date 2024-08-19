@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:bpbm_technician/common/widgets/button_widget_normal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bpbm_technician/blocs/auth_bloc/auth_bloc.dart';
-import 'package:bpbm_technician/common/constants_2.dart';
 import 'package:bpbm_technician/screens/profile_screen/widgets/profile_user_info.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -18,7 +17,8 @@ class ProfileScreen extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          ElevatedButton(
+          ButtonWidgetNormal(
+            width: MediaQuery.of(context).size.width * 0.5,
             onPressed: () {
               showDialog(
                 context: context,
@@ -51,8 +51,8 @@ class ProfileScreen extends StatelessWidget {
                 },
               );
             },
-            style: Constants.getElevatedButtonStyle(ButtonType.cancel),
-            child: Text('خروج از حساب کاربری'),
+            buttonType: ButtonWidgetType.cancel,
+            text: 'خروج از حساب کاربری',
           ),
         ],
       ),

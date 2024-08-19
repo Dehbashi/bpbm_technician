@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:bpbm_technician/data/models/orders/order_detail_invoice_model.dart';
 
 class OrderDetails {
@@ -86,5 +88,72 @@ class OrderDetails {
       deletedAt: json['deleted_at'],
       invoice: OrderDetailInvoiceModel.fromJson(json['factor']),
     );
+  }
+
+  @override
+  String toString() {
+    return 'OrderDetails(id: $id, orderDataId: $orderDataId, serviceId: $serviceId, userId: $userId, priceServices: $priceServices, priceProduct: $priceProduct, transportationCost: $transportationCost, tax: $tax, discount: $discount, totalPrice: $totalPrice, addressId: $addressId, date: $date, time: $time, text: $text, status: $status, orderStatus: $orderStatus, pull: $pull, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, items: $items, address: $address, service: $service, user: $user, notes: $notes, invoice: $invoice)';
+  }
+
+  @override
+  bool operator ==(covariant OrderDetails other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.orderDataId == orderDataId &&
+        other.serviceId == serviceId &&
+        other.userId == userId &&
+        other.priceServices == priceServices &&
+        other.priceProduct == priceProduct &&
+        other.transportationCost == transportationCost &&
+        other.tax == tax &&
+        other.discount == discount &&
+        other.totalPrice == totalPrice &&
+        other.addressId == addressId &&
+        other.date == date &&
+        other.time == time &&
+        other.text == text &&
+        other.status == status &&
+        other.orderStatus == orderStatus &&
+        other.pull == pull &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.deletedAt == deletedAt &&
+        listEquals(other.items, items) &&
+        other.address == address &&
+        other.service == service &&
+        other.user == user &&
+        other.notes == notes &&
+        other.invoice == invoice;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        orderDataId.hashCode ^
+        serviceId.hashCode ^
+        userId.hashCode ^
+        priceServices.hashCode ^
+        priceProduct.hashCode ^
+        transportationCost.hashCode ^
+        tax.hashCode ^
+        discount.hashCode ^
+        totalPrice.hashCode ^
+        addressId.hashCode ^
+        date.hashCode ^
+        time.hashCode ^
+        text.hashCode ^
+        status.hashCode ^
+        orderStatus.hashCode ^
+        pull.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode ^
+        deletedAt.hashCode ^
+        items.hashCode ^
+        address.hashCode ^
+        service.hashCode ^
+        user.hashCode ^
+        notes.hashCode ^
+        invoice.hashCode;
   }
 }

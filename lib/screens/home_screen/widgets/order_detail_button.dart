@@ -1,9 +1,11 @@
+import 'package:bpbm_technician/app_theme/my_colors.dart';
+import 'package:bpbm_technician/common/methods/open_map.dart';
+import 'package:bpbm_technician/common/widgets/button_widget_normal.dart';
 import 'package:bpbm_technician/screens/order_screen/order_invoice_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:persian/persian.dart';
-import 'package:bpbm_technician/common/constants_2.dart';
 import 'package:bpbm_technician/data/models/orders/order_detail.dart';
-import 'package:bpbm_technician/data/models/orders/order_model.dart';
 import 'package:bpbm_technician/screens/home_screen/widgets/order_state_buttons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,15 +18,16 @@ class OrderDetailButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> openGoogleMaps(String lat, String lng) async {
-      // final url = 'https://www.google.com/maps/@$lat,$lng,16z?entry=ttu';
+    // Future<void> openGoogleMaps(String lat, String lng) async {
+    //   final url =
+    //       'https://www.google.com/maps/dir//$lat,$lng/@$lat,$lng,15z?entry=ttu';
 
-      final url =
-          'https://www.google.com/maps/dir//$lat,$lng/@$lat,$lng,15z?entry=ttu';
-      print(url);
-      final uri = Uri.parse(url);
-      await launchUrl(uri);
-    }
+    //   print(url);
+    //   final uri = Uri.parse(url);
+    //   await launchUrl(uri);
+    // }
+
+    final TextStyle textStyle = Theme.of(context).textTheme.bodyMedium!;
 
     return Container(
       padding: const EdgeInsets.all(10),
@@ -39,23 +42,19 @@ class OrderDetailButton extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.all(10),
-              // width: MediaQuery.of(context).size.width * 0.4,
-              // height: 70,
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: Column(
                   children: [
                     Text(
                       'جزئیات سفارش ${orderDetails.id.toString().withPersianNumbers()}',
-                      style: TextStyle(
+                      style: textStyle.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'iransans',
                       ),
                     ),
                     Text(
                       '${orderDetails.service["title"]}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
+                      style: textStyle.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -64,17 +63,14 @@ class OrderDetailButton extends StatelessWidget {
                     ),
                     Text(
                       '${orderDetails.items[0]["title"]}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
-                      ),
+                      style: textStyle,
                     ),
                     SizedBox(
                       height: 20,
                     ),
                     Text(
                       '${orderDetails.items[0]["value"]}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
+                      style: textStyle.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -83,26 +79,24 @@ class OrderDetailButton extends StatelessWidget {
                     ),
                     Text(
                       'یادداشت های مشتری: ${orderDetails.notes}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
+                      style: textStyle,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'تاریخ مراجعه: ${orderDetails.date.withPersianNumbers()}',
+                      style: textStyle.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
                       height: 20,
                     ),
                     Text(
-                      'تاریخ مراجعه: ${orderDetails.date}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'زمان مراجعه: ${orderDetails.time}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
+                      'زمان مراجعه: ${orderDetails.time.withPersianNumbers()}',
+                      style: textStyle.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
@@ -110,26 +104,22 @@ class OrderDetailButton extends StatelessWidget {
                     ),
                     Text(
                       'آدرس: منطقه ${orderDetails.address["municipality_zone"]} ${orderDetails.address["text"]}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
-                      ),
+                      style: textStyle,
                     ),
                     SizedBox(
                       height: 20,
                     ),
                     Text(
-                      'پلاک: ${orderDetails.address["housenumber"] ?? 'null'}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
-                      ),
+                      'پلاک: ${orderDetails.address["housenumber"] ?? '-'}',
+                      style: textStyle,
                     ),
                     SizedBox(
                       height: 20,
                     ),
                     Text(
                       'نام مشتری: ${orderDetails.user["name"]}',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
+                      style: textStyle.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
@@ -137,9 +127,7 @@ class OrderDetailButton extends StatelessWidget {
                     ),
                     Text(
                       'شماره تلفن:',
-                      style: TextStyle(
-                        fontFamily: 'iransans',
-                      ),
+                      style: textStyle,
                     ),
                     SizedBox(
                       height: 20,
@@ -155,13 +143,11 @@ class OrderDetailButton extends StatelessWidget {
                           orderDetails.user["phone_number"]
                               .toString()
                               .withPersianNumbers(),
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.blue,
-                            fontFamily: 'iransans',
-                            color: Colors.blue,
-                            fontSize: 20,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    color: MyColors.blueLight().shade700,
+                                    decoration: TextDecoration.underline,
+                                  ),
                         ),
                       ),
                     ),
@@ -170,26 +156,26 @@ class OrderDetailButton extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        openGoogleMaps(orderDetails.address["latitude"],
-                            orderDetails.address["longitude"]);
-                        print(
-                            '${orderDetails.address["latitude"]} and ${orderDetails.address["longitude"]}');
+                        openMap(
+                          lat: orderDetails.address["latitude"],
+                          lng: orderDetails.address["longitude"],
+                        );
                       },
                       child: Center(
                         child: Text(
                           'مسیریابی روی نقشه',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontFamily: 'iransans',
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: MyColors.blueLight().shade600,
+                                  ),
                         ),
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    ElevatedButton(
+                    ButtonWidgetNormal(
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -199,8 +185,9 @@ class OrderDetailButton extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text('مشاهده آخرین پیش‌فاکتور مشتری'),
-                      style: Constants.getElevatedButtonStyle(ButtonType.notes),
+                      width: double.infinity,
+                      buttonType: ButtonWidgetType.details,
+                      text: 'مشاهده آخرین پیش‌فاکتور مشتری',
                     ),
                   ],
                 ),

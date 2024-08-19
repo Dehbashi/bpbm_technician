@@ -1,5 +1,6 @@
+import 'package:bpbm_technician/app_theme/app_theme.dart';
 import 'package:bpbm_technician/common/methods/gregorian_to_shamsi.dart';
-import 'package:bpbm_technician/common/widgets/swipable_item.dart';
+import 'package:bpbm_technician/common/widgets/my_vertical_divider.dart';
 import 'package:bpbm_technician/data/models/comment_model/comment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
@@ -21,16 +22,16 @@ class NotesScreenMessages extends StatefulWidget {
 }
 
 class _NotesScreenMessagesState extends State<NotesScreenMessages> {
-  late List<bool> _isSwipingList;
-  double _startX = 0;
-  double _currentX = 0;
-  bool _isSwiping = false;
+  // late List<bool> _isSwipingList;
+  // double _startX = 0;
+  // double _currentX = 0;
+  // bool _isSwiping = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _isSwipingList = List.generate(widget.comments.length, (_) => false);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _isSwipingList = List.generate(widget.comments.length, (_) => false);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +59,21 @@ class _NotesScreenMessagesState extends State<NotesScreenMessages> {
             padding: const EdgeInsets.all(5),
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
+              color: AppTheme.light().primary.shade100,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HtmlWidget(comment.text),
+                if (comment.text.contains('<p>'))
+                  HtmlWidget(
+                    comment.text,
+                  ),
+                if (!comment.text.contains('<p>'))
+                  Text(
+                    comment.text,
+                    softWrap: true,
+                  ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -91,11 +100,28 @@ class _NotesScreenMessagesState extends State<NotesScreenMessages> {
                       }),
                     ],
                   ),
-                Text(
-                  comment.createdAt != null
-                      ? gregorianToShamsi(comment.createdAt!)
-                      : '',
-                  style: Theme.of(context).textTheme.bodySmall,
+                Row(
+                  children: [
+                    Text(
+                      comment.createdAt != null
+                          ? gregorianToShamsiDateOnlyWithSlash(
+                              comment.createdAt!)
+                          : '',
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: AppTheme.light().neutral.shade400,
+                          ),
+                    ),
+                    MyVerticalDivider(),
+                    Text(
+                      comment.createdAt != null
+                          ? gregorianToShamsiTimeOnlyWithoutText(
+                              comment.createdAt!)
+                          : '',
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: AppTheme.light().neutral.shade400,
+                          ),
+                    )
+                  ],
                 ),
               ],
             ),

@@ -34,19 +34,15 @@ class HomeScreen extends StatelessWidget {
               );
             } else if (state is OrderSuccess) {
               final orders = state.orders;
-              // final listOfOrderDetails = state.orderDetails;
               return Expanded(
                 child: Container(
                   margin: EdgeInsets.all(10),
-                  // height: 400,
                   width: double.infinity,
                   child: ListView.builder(
                     itemCount: orders.length,
                     itemBuilder: (context, index) {
                       final indexFromLast = orders.length - index - 1;
                       final order = orders[indexFromLast];
-                      // final orderDetails = listOfOrderDetails[indexFromLast];
-                      // final status = order.order_status;
 
                       return OrdersContainer(
                         order: order,

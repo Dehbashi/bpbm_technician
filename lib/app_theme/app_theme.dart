@@ -1,78 +1,177 @@
+import 'package:bpbm_technician/app_theme/my_colors.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
+  final Color black;
+  final Color white;
+  final MyColors neutral;
+  MyColors primary;
+  final MyColors error;
+  final MyColors warning;
+  final MyColors success;
+
+  AppTheme.light({MyColors? primary})
+      : black = Colors.black,
+        white = Colors.white,
+        neutral = MyColors.neutral(),
+        primary = primary ?? MyColors.primaryLight(),
+        error = MyColors.errorLight(),
+        warning = MyColors.warningLight(),
+        success = MyColors.successLight();
+
+  AppTheme.dark({MyColors? primary})
+      : black = Colors.black,
+        white = Colors.white,
+        neutral = MyColors.neutral(),
+        primary = primary ?? MyColors.primaryDark(),
+        error = MyColors.errorDark(),
+        warning = MyColors.warningDark(),
+        success = MyColors.successDark();
+
   ThemeData getTheme() {
+    const String defaultFontFamily = 'iransans';
     return ThemeData(
-      fontFamily: 'iransans',
+      fontFamily: defaultFontFamily,
+      timePickerTheme: TimePickerThemeData(backgroundColor: primary.shade200),
+      datePickerTheme: DatePickerThemeData(backgroundColor: primary.shade200),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: Color.fromARGB(255, 84, 177, 147),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        backgroundColor: white,
+        type: BottomNavigationBarType.fixed,
         selectedIconTheme: IconThemeData(
-          size: 28,
-          color: Colors.white,
+          color: primary.shade800,
+          size: 20,
         ),
         unselectedIconTheme: IconThemeData(
-          size: 28,
+          color: neutral.shade400,
+          size: 20,
         ),
-        type: BottomNavigationBarType.fixed,
-      ),
-      expansionTileTheme: ExpansionTileThemeData(
-        shape: OutlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-      ),
-      appBarTheme: AppBarTheme(
-        elevation: 2,
-        shadowColor: Colors.black54,
-      ),
-      listTileTheme: ListTileThemeData(
-        titleTextStyle: TextStyle(
-          fontFamily: 'iransans',
-          fontSize: 16,
-        ),
-      ),
-      // dialogTheme: DialogTheme(
-      //   titleTextStyle: TextStyle(
-      //     fontFamily: 'iransans',
-      //     fontWeight: FontWeight.bold,
-      //     color: Colors.black,
-      //   ),
-      //   contentTextStyle: TextStyle(
-      //     fontFamily: 'iransans',
-      //     color: Colors.black,
-      //   ),
-      // ),
-
-      textTheme: TextTheme(
-        titleSmall: TextStyle(
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        selectedItemColor: primary.shade800,
+        selectedLabelStyle: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 16,
+          fontSize: 10,
+          height: 16 / 10,
+          letterSpacing: 0.8 / 10,
+          color: neutral.shade800,
         ),
-        titleMedium: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 12,
-          color: Colors.grey,
+        unselectedLabelStyle: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 10,
+          height: 16 / 10,
+          letterSpacing: 0.8 / 10,
+          color: neutral.shade500,
         ),
       ),
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(
+          iconColor: WidgetStateProperty.all(black),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: WidgetStateProperty.all(primary.shade800),
+        ),
+      ),
+      textTheme: faPrimaryTextTheme,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(Colors.white),
-          backgroundColor: MaterialStateProperty.all(Colors.green),
+          padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+          backgroundColor: WidgetStateProperty.all(primary.shade700),
+          foregroundColor: WidgetStateProperty.all(black),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
         ),
       ),
-      colorScheme: ColorScheme.light(
-        primary: Color(0xffcdeef0),
-        onPrimary: Color(0xff04a8b2),
-        secondary: Color.fromARGB(255, 243, 244, 232),
+      shadowColor: const Color(0xff101828),
+      scaffoldBackgroundColor: white,
+      appBarTheme: AppBarTheme(
+        backgroundColor: white,
+        shadowColor: Colors.black87,
+        elevation: 1,
+        titleTextStyle: TextStyle(
+          fontFamily: defaultFontFamily,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: black,
+        ),
       ),
-      useMaterial3: true,
+      dialogTheme: DialogTheme(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        backgroundColor: white,
+        contentTextStyle: TextStyle(
+          fontFamily: defaultFontFamily,
+          color: black,
+        ),
+        titleTextStyle: TextStyle(
+            fontFamily: defaultFontFamily,
+            fontWeight: FontWeight.bold,
+            color: black),
+      ),
+      colorScheme: ColorScheme.light(
+        primary: primary.shade700,
+      ),
     );
   }
+
+  TextTheme get faPrimaryTextTheme => TextTheme(
+        //xs
+        labelSmall: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 10,
+          height: 16 / 10,
+          letterSpacing: 0.8 / 10,
+          color: neutral.shade800,
+        ),
+
+        //sm
+        labelMedium: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 12,
+          height: 20 / 12,
+          letterSpacing: 0.4 / 12,
+          color: neutral.shade800,
+        ),
+
+        //base
+        bodyMedium: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 14,
+          height: 24 / 14,
+          letterSpacing: 0.8 / 14,
+          color: neutral.shade800,
+        ),
+
+        //lg
+        bodyLarge: TextStyle(
+          fontWeight: FontWeight.normal,
+          fontSize: 16,
+          height: 28 / 16,
+          letterSpacing: 0.8 / 16,
+          color: neutral.shade900,
+        ),
+
+        //xl
+        titleMedium: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          height: 32 / 18,
+          letterSpacing: 0.8 / 18,
+          color: neutral.shade800,
+        ),
+
+        //2xl
+        titleLarge: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+          height: 32 / 20,
+          letterSpacing: 0.4 / 20,
+          color: neutral.shade800,
+        ),
+      );
 }

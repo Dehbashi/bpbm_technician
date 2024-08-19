@@ -1,3 +1,4 @@
+import 'package:bpbm_technician/common/widgets/button_widget_normal.dart';
 import 'package:bpbm_technician/screens/auth_screens/auth_widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,9 +18,8 @@ class _NotesScreenTextFieldAttachmentsState
     extends State<NotesScreenTextFieldAttachments> {
   @override
   Widget build(BuildContext context) {
-    return ButtonWidget(
-      buttonWidth: double.infinity,
-      color: Theme.of(context).colorScheme.onPrimary,
+    return ButtonWidgetNormal(
+      width: MediaQuery.of(context).size.width * 0.4,
       onPressed: () {
         // loseFocus();
         showDialog(
@@ -82,7 +82,8 @@ class _NotesScreenTextFieldAttachmentsState
           },
         );
       },
-      text: 'پیوست های انتخاب شده',
+      buttonType: ButtonWidgetType.details,
+      text: 'پیوست‌های انتخاب شده',
     );
   }
 }

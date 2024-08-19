@@ -1,3 +1,5 @@
+import 'package:bpbm_technician/app_theme/my_colors.dart';
+import 'package:bpbm_technician/blocs/app_theme_bloc/app_theme_bloc.dart';
 import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_header.dart';
 import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_messages.dart';
@@ -5,7 +7,6 @@ import 'package:bpbm_technician/screens/notes_screen/widgets/notes_screen_text_f
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:persian/persian.dart';
 
 class NotesScreen extends StatefulWidget {
   final int orderId;
@@ -44,6 +45,8 @@ class _NotesScreenState extends State<NotesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    MyColors primary = context.watch<AppThemeBloc>().state.primary;
+
     return BlocBuilder<CommentBloc, CommentState>(
       builder: (context, state) {
         if (state is CommentFailed) {
@@ -60,7 +63,7 @@ class _NotesScreenState extends State<NotesScreen> {
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).colorScheme.primary,
+              color: primary.shade700,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

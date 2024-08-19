@@ -1,5 +1,8 @@
+import 'package:bpbm_technician/app_theme/my_colors.dart';
+import 'package:bpbm_technician/blocs/app_theme_bloc/app_theme_bloc.dart';
 import 'package:bpbm_technician/data/models/orders/order_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persian/persian.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 
@@ -9,6 +12,8 @@ class OrderInvoiceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MyColors primary = context.watch<AppThemeBloc>().state.primary;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       child: Column(
@@ -48,18 +53,28 @@ class OrderInvoiceScreen extends StatelessWidget {
                     child: Container(
                       margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: primary.shade200,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ExpansionTile(
                         childrenPadding: const EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide.none,
+                        ),
                         title: Row(
                           children: [
                             Expanded(
                               child: Text('${invoice.title} (${invoice.text})'),
                             ),
                             Text(
-                                '${(int.parse(invoice.price) * invoice.number).toString().seRagham().toPersianDigit()} ریال'),
+                              '${(int.parse(invoice.price) * invoice.number).toString().seRagham().toPersianDigit()} ریال',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
                           ],
                         ),
                         children: [

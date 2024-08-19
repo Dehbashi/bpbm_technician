@@ -1,5 +1,6 @@
+import 'package:bpbm_technician/app_theme/app_theme.dart';
 import 'package:bpbm_technician/blocs/order_bloc/order_bloc.dart';
-import 'package:bpbm_technician/common/constants_2.dart';
+import 'package:bpbm_technician/common/widgets/button_widget_normal.dart';
 import 'package:bpbm_technician/services/background_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,7 @@ class HomeScreenButtons extends StatefulWidget {
 
 class _HomeScreenButtonsState extends State<HomeScreenButtons> {
   bool locStart = true;
-  String text = "سرویس دهی";
+  String text = "سرویس‌دهی";
   Color color = Colors.white;
 
   Future<void> LocationStart() async {
@@ -35,63 +36,36 @@ class _HomeScreenButtonsState extends State<HomeScreenButtons> {
   Future<void> serviceText() async {
     if (await LocationService.isServiceRunning) {
       setState(() {
-        text = 'پایان سرویس دهی';
-        color = Colors.red;
+        text = 'پایان سرویس‌دهی';
+        color = AppTheme.light().error.shade700;
       });
     } else {
       setState(() {
-        text = 'شروع سرویس دهی';
-        color = Colors.green;
+        text = 'شروع سرویس‌دهی';
+        color = AppTheme.light().success.shade700;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-          style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsets>(
-              EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            ),
-            backgroundColor: MaterialStateProperty.all(Colors.orange),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        children: [
+          ButtonWidgetNormal(
+            width: MediaQuery.of(context).size.width * 0.4,
+            onPressed: () async {
+              BlocProvider.of<OrderBloc>(context).add(OrderStarted());
+            },
+            buttonType: ButtonWidgetType.refresh,
+            text: 'بروزرسانی سرویس‌ها',
           ),
-          onPressed: () async {
-            BlocProvider.of<OrderBloc>(context).add(OrderStarted());
-          },
-          child: Text(
-            'بروزرسانی سرویس ها',
-            style: TextStyle(
-              fontFamily: Constants.textFont,
-              color: Colors.white,
-            ),
+          SizedBox(
+            height: 10,
           ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Container(
-          margin: EdgeInsets.only(bottom: 20),
-          width: 200,
-          // height: 60,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(
-                EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              ),
-              backgroundColor: MaterialStateProperty.all(color),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
+          ButtonWidgetNormal(
+            width: MediaQuery.of(context).size.width * 0.4,
             onPressed: () async {
               final isPermissionsGranted =
                   await LocationService.isPermissionsGranted;
@@ -99,30 +73,24 @@ class _HomeScreenButtonsState extends State<HomeScreenButtons> {
               if (await LocationService.isServiceRunning) {
                 await LocationService.stop();
                 setState(() {
-                  text = 'شروع سرویس دهی';
-                  color = Colors.green;
+                  text = 'شروع سرویس‌دهی';
+                  color = AppTheme.light().success.shade700;
                 });
               } else {
                 LocationStart();
                 await LocationService.start();
                 setState(() {
-                  text = 'پایان سرویس دهی';
-                  color = Colors.red;
+                  text = 'پایان سرویس‌دهی';
+                  color = AppTheme.light().error.shade700;
                 });
               }
             },
-            child: Text(
-              text,
-              style: TextStyle(
-                fontFamily: Constants.textFont,
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            color: color,
+            buttonType: ButtonWidgetType.backgroundService,
+            text: text,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

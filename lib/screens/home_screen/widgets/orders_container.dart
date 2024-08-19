@@ -1,9 +1,11 @@
+import 'package:bpbm_technician/app_theme/my_colors.dart';
+import 'package:bpbm_technician/blocs/app_theme_bloc/app_theme_bloc.dart';
 import 'package:bpbm_technician/blocs/comment_bloc/comment_bloc.dart';
+import 'package:bpbm_technician/common/widgets/button_widget_normal.dart';
 import 'package:bpbm_technician/screens/home_screen/widgets/order_detail_container.dart';
-import 'package:flutter/material.dart';
-import 'package:bpbm_technician/common/constants_2.dart';
-import 'package:bpbm_technician/data/models/orders/order_model.dart';
 import 'package:bpbm_technician/screens/notes_screen/notes_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:bpbm_technician/data/models/orders/order_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:persian/persian.dart';
 
@@ -16,20 +18,12 @@ class OrdersContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Future<void> openGoogleMaps(String lat, String lng) async {
-    //   // final url = 'https://www.google.com/maps/@$lat,$lng,16z?entry=ttu';
-
-    //   final url =
-    //       'https://www.google.com/maps/dir//$lat,$lng/@$lat,$lng,15z?entry=ttu';
-    //   print(url);
-    //   final uri = Uri.parse(url);
-    //   await launchUrl(uri);
-    // }
+    MyColors primary = context.watch<AppThemeBloc>().state.primary;
 
     return Container(
       margin: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 181, 243, 222),
+        color: primary.shade200,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
@@ -45,10 +39,9 @@ class OrdersContainer extends StatelessWidget {
         child: ExpansionTile(
           title: Text(
             'سفارش شماره ${order.id.toString().withPersianNumbers()}: ${order.service} (${order.customerName})',
-            style: TextStyle(
-              fontFamily: 'iransans',
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           children: [
             ListTile(
@@ -59,46 +52,48 @@ class OrdersContainer extends StatelessWidget {
                     ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => OrderDetailContainer(
-                            orderId: order.id,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text('جزئیات'),
-                    style: Constants.getElevatedButtonStyle(ButtonType.details),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => BlocProvider(
-                            create: (context) => CommentBloc(context),
-                            child: NotesScreen(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: ButtonWidgetNormal(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => OrderDetailContainer(
                               orderId: order.id,
-                              orderTitle: order.service,
                             ),
                           ),
-                        ),
-                      );
-                    },
-                    child: Text('یادداشت ها'),
-                    style: Constants.getElevatedButtonStyle(ButtonType.notes),
+                        );
+                      },
+                      buttonType: ButtonWidgetType.details,
+                      text: 'جزئیات',
+                    ),
                   ),
-                )
-              ],
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ButtonWidgetNormal(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => CommentBloc(context),
+                              child: NotesScreen(
+                                orderId: order.id,
+                                orderTitle: order.service,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      buttonType: ButtonWidgetType.notes,
+                      text: 'یادداشت‌ها',
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),

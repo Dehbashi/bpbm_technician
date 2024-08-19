@@ -1,4 +1,6 @@
+import 'package:bpbm_technician/blocs/app_theme_bloc/app_theme_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:provider/provider.dart';
 
 class MainScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -7,6 +9,9 @@ class MainScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appThemeState = context.watch<AppThemeBloc>().state;
+    final primary = appThemeState.primary;
+
     return AppBar(
       title: Directionality(
         textDirection: TextDirection.rtl,
@@ -20,11 +25,10 @@ class MainScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Text(
               'متخصص',
-              style: TextStyle(
-                color: Color(0xFF037E85),
-                fontFamily: 'iranSans',
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: primary.shade700,
+                  ),
             ),
           ],
         ),

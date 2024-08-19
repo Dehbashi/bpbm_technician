@@ -61,4 +61,57 @@ class InvoiceItemModel {
         createdAt = json['created_at'],
         updatedAt = json['updated_at'],
         deletedAt = json['deleted_at'];
+
+  @override
+  String toString() {
+    return 'InvoiceItemModel(id: $id, invoiceId: $invoiceId, title: $title, type: $type, number: $number, price: $price, discount: $discount, purchasePrice: $purchasePrice, serviceType: $serviceType, shopType: $shopType, productName: $productName, subsidiary: $subsidiary, unit: $unit, text: $text, userId: $userId, financialType: $financialType, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt)';
+  }
+
+  @override
+  bool operator ==(covariant InvoiceItemModel other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.invoiceId == invoiceId &&
+        other.title == title &&
+        other.type == type &&
+        other.number == number &&
+        other.price == price &&
+        other.discount == discount &&
+        other.purchasePrice == purchasePrice &&
+        other.serviceType == serviceType &&
+        other.shopType == shopType &&
+        other.productName == productName &&
+        other.subsidiary == subsidiary &&
+        other.unit == unit &&
+        other.text == text &&
+        other.userId == userId &&
+        other.financialType == financialType &&
+        other.createdAt == createdAt &&
+        other.updatedAt == updatedAt &&
+        other.deletedAt == deletedAt;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        invoiceId.hashCode ^
+        title.hashCode ^
+        type.hashCode ^
+        number.hashCode ^
+        price.hashCode ^
+        discount.hashCode ^
+        purchasePrice.hashCode ^
+        serviceType.hashCode ^
+        shopType.hashCode ^
+        productName.hashCode ^
+        subsidiary.hashCode ^
+        unit.hashCode ^
+        text.hashCode ^
+        userId.hashCode ^
+        financialType.hashCode ^
+        createdAt.hashCode ^
+        updatedAt.hashCode ^
+        deletedAt.hashCode;
+  }
 }

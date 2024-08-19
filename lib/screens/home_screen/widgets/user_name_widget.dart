@@ -1,4 +1,7 @@
+import 'package:bpbm_technician/app_theme/app_theme.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:persian/persian.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bpbm_technician/common/methods/load_user.dart';
 
@@ -43,7 +46,10 @@ class _UserNameWidgetState extends State<UserNameWidget> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CupertinoActivityIndicator();
         } else if (!snapshot.hasData) {
-          return Text('متخصص بسپارش به ما');
+          return Text(
+            'متخصص بسپارش به ما',
+            style: Theme.of(context).textTheme.titleLarge,
+          );
         } else {
           final data = snapshot.data!;
           return GestureDetector(
@@ -54,7 +60,7 @@ class _UserNameWidgetState extends State<UserNameWidget> {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Color(0xFF9BDCE0),
+                color: AppTheme.light().neutral.shade300,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,50 +68,10 @@ class _UserNameWidgetState extends State<UserNameWidget> {
                   Expanded(
                     flex: 8,
                     child: Text(
-                      '${data[0]} ${data[1]} ${data[2]}',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'iransans',
-                        height: 2.5,
-                      ),
+                      '${data[0]} ${data[1]} ${data[2].withPersianNumbers()}',
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
-                  // Flexible(
-                  //   flex: 2,
-                  //   child: IconButton(
-                  //     icon: Icon(Icons.logout_outlined),
-                  //     onPressed: () {
-                  //       // showDialog(
-                  //       //   context: context,
-                  //       //   builder: (context) {
-                  //       //     return AlertDialog(
-                  //       //       title: Text('خروج از سامانه'),
-                  //       //       content: Text('آیا از تصمیم خود مطمئن هستید؟'),
-                  //       //       actions: [
-                  //       //         TextButton(
-                  //       //           onPressed: () {
-                  //       //             BlocProvider.of<AuthBloc>(context).add(
-                  //       //               AuthSignOut(),
-                  //       //             );
-                  //       //             Navigator.of(context).pop();
-                  //       //           },
-                  //       //           child: Text('بله'),
-                  //       //         ),
-                  //       //         TextButton(
-                  //       //           onPressed: () {
-                  //       //             Navigator.of(context).pop();
-                  //       //           },
-                  //       //           child: Text('خیر'),
-                  //       //         ),
-                  //       //       ],
-                  //       //     );
-                  //       //   },
-                  //       // );
-                  //     },
-                  //     tooltip: 'خروج از سامانه',
-                  //   ),
-                  // ),
                 ],
               ),
             ),
