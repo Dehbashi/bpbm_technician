@@ -22,9 +22,9 @@ class TextFieldWidgetNormal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void loseFocus() {
-      focusNode.unfocus();
-    }
+    // void loseFocus() {
+    //   focusNode.unfocus();
+    // }
 
     void _applyBoldFormatting(
         TextEditingController controller, TextSelection selection) {
