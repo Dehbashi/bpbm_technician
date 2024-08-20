@@ -5,6 +5,7 @@ import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:bpbm_technician/blocs/auth_bloc/auth_bloc.dart';
 import 'package:bpbm_technician/screens/auth_screens/auth_widgets/auth_screen_center_logo.dart';
 import 'package:bpbm_technician/screens/auth_screens/auth_widgets/button_widget.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class VerifySmsScreen extends StatefulWidget {
   const VerifySmsScreen({super.key});
@@ -16,6 +17,13 @@ class VerifySmsScreen extends StatefulWidget {
 
 class _VerifySmsScreenState extends State<VerifySmsScreen> {
   String otpCode = '';
+  final SmsAutoFill _smsAutoFill = SmsAutoFill();
+
+  @override
+  void initState() {
+    super.initState();
+    _smsAutoFill.listenForCode;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +47,19 @@ class _VerifySmsScreenState extends State<VerifySmsScreen> {
                   const SizedBox(
                     height: 10,
                   ),
+                  // Directionality(
+                  //   textDirection: TextDirection.ltr,
+                  //   child: PinFieldAutoFill(
+                  //     onCodeChanged: (code) {
+                  //       if (code?.length == 5) {
+                  //         print('Entered OTP: $code');
+                  //         setState(() {
+                  //           otpCode = code!;
+                  //         });
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
                   Directionality(
                     textDirection: TextDirection.ltr,
                     child: OtpTextField(

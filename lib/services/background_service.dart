@@ -18,7 +18,7 @@ final _foregroundServiceAndroidConfig = AndroidConfiguration(
   notificationChannelId: kLocationServiceChannel.id,
   initialNotificationTitle: 'Location Service',
   initialNotificationContent: 'Running',
-  autoStartOnBoot: true,
+  autoStartOnBoot: false,
 );
 
 final _foregroundServiceIosConfig = IosConfiguration(
